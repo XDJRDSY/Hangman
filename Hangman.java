@@ -3,24 +3,23 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package hangman1;
+//package hangman1;
 
 import java.awt.Toolkit;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import javax.swing.JOptionPane;
+import java.util.Random;
 
-/**
- *
- * @author jphung1
- */
 public class Hangman extends javax.swing.JFrame {
-
-    int counter=0; 
-    String word = "color";
-    char[] wordblanks = new char[word.length()];
     
+    int counter = 0; 
+    Random r = new Random();
+    int random = 1 + r.nextInt(10);
+    String word = "";
+    char[] wordblanks = new char[word.length()];
+
     /**
      * Creates new form Hangman
      */
@@ -31,6 +30,7 @@ public class Hangman extends javax.swing.JFrame {
         int y = (int) ((screen.getHeight() -getHeight()) /2);
         setLocation(x, y); 
         output.setEditable(false);
+        randomWord(random);
         displayBlanks(word);
     }
     
@@ -73,9 +73,59 @@ public class Hangman extends javax.swing.JFrame {
         String b = new String(x);
         if(b.equals(word))
         {
+            output.setText(b);
             JOptionPane.showMessageDialog(null, "Congratulations! You win!");
+            reset();
         }
-        output.setText(b);
+        else
+            output.setText(b);
+    }
+    
+    public void randomWord(int ran){
+        int randomNum = ran;
+              
+        switch (randomNum){
+            case 1: word = "panel";
+                    wordblanks = new char[word.length()];
+                break;
+            case 2: word = "container";
+                    wordblanks = new char[word.length()];
+                break;
+            case 3: word = "frame";
+                    wordblanks = new char[word.length()];
+                break;
+            case 4: word = "event";
+                    wordblanks = new char[word.length()];
+                break;
+            case 5: word = "button";
+                    wordblanks = new char[word.length()];
+                break;
+            case 6: word = "netbeans";
+                    wordblanks = new char[word.length()];
+                break;
+            case 7: word = "menu";
+                    wordblanks = new char[word.length()];
+                break;
+            case 8: word = "component";
+                    wordblanks = new char[word.length()];
+                break;
+            case 9: word = "swing";
+                    wordblanks = new char[word.length()];
+                break;
+            case 10: word = "font";
+                    wordblanks = new char[word.length()];
+                break;
+        }   
+    }
+    
+    
+    public void reset(){
+        counter = 0;
+        random = 1 + r.nextInt(10);
+        randomWord(random);
+        displayBlanks(word);
+        draw();
+        repaint();
     }
 
     /**
@@ -349,10 +399,22 @@ public class Hangman extends javax.swing.JFrame {
 
         jMenu1.setText("File");
 
+        menuNewGame.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
         menuNewGame.setText("New Game");
+        menuNewGame.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuNewGameActionPerformed(evt);
+            }
+        });
         jMenu1.add(menuNewGame);
 
+        menuClose.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_ESCAPE, 0));
         menuClose.setText("Close");
+        menuClose.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuCloseActionPerformed(evt);
+            }
+        });
         jMenu1.add(menuClose);
 
         jMenuBar1.add(jMenu1);
@@ -470,7 +532,7 @@ public class Hangman extends javax.swing.JFrame {
                     .addComponent(buttonX, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(buttonY, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(buttonZ, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -606,6 +668,16 @@ public class Hangman extends javax.swing.JFrame {
         verify(word,"z");
     }//GEN-LAST:event_buttonZActionPerformed
 
+    private void menuNewGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuNewGameActionPerformed
+        // TODO add your handling code here:
+        reset();
+    }//GEN-LAST:event_menuNewGameActionPerformed
+
+    private void menuCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCloseActionPerformed
+        // TODO add your handling code here:
+        System.exit(0); // exit game if player click exit in menu bar or hit ESC
+    }//GEN-LAST:event_menuCloseActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -632,7 +704,7 @@ public class Hangman extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(Hangman.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+   
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -640,7 +712,7 @@ public class Hangman extends javax.swing.JFrame {
             }
         });
     }
-    
+      
     @Override
     public void paint(Graphics g) 
     {
@@ -667,7 +739,8 @@ public class Hangman extends javax.swing.JFrame {
             case 5: gfx.drawLine(207,190,190,197);
             break;
             case 6: gfx.drawLine(207,190, 224,197);
-            JOptionPane.showMessageDialog(null, "Game Over!");
+            JOptionPane.showMessageDialog(null, "Game Over! The word was "+word);
+            reset();
             break;
         }
     }
